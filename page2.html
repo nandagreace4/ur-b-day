@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Letter For You</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: #fff6f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .container { text-align: center; }
+
+  h1 {
+    font-size: 14px;
+    color: #e85b8f;
+    margin-bottom: 28px;
+    min-height: 24px;
+  }
+
+  .envelope {
+    font-size: 72px;
+    margin-bottom: 28px;
+    opacity: 0;
+    transform: translateY(14px) rotate(-22deg);
+    animation:
+      showEnvelope 0.8s ease forwards,
+      float 2.2s ease-in-out infinite;
+    animation-delay: 0.8s, 1.6s;
+  }
+
+  @keyframes showEnvelope {
+    to { opacity: 1; transform: translateY(0) rotate(-22deg); }
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0) rotate(-22deg); }
+    50% { transform: translateY(-8px) rotate(-22deg); }
+    100% { transform: translateY(0) rotate(-22deg); }
+  }
+
+  .buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+  }
+
+  button {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 10px;
+    background: #e85b8f;
+    color: white;
+    cursor: pointer;
+  }
+
+  button:hover { background: #d94b7f; }
+
+  #cursor { animation: blink 1s infinite; }
+
+  @keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 AUDIO -->
+<audio id="bg-music" loop>
+  <source src="song's.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+  <h1 id="typing-text"><span id="cursor">|</span></h1>
+  <div class="envelope">💌</div>
+
+  <div class="buttons">
+    <button onclick="goBack()">Go Back</button>
+    <button onclick="openLetter()">Open It</button>
+  </div>
+</div>
+
+<script>
+  const text = "Letter For You!";
+  const speed = 120;
+  let i = 0;
+
+  const music = document.getElementById("bg-music");
+
+  function typeText() {
+    if (i < text.length) {
+      document.getElementById("typing-text").innerHTML =
+        text.substring(0, i + 1) + '<span id="cursor">|</span>';
+      i++;
+      setTimeout(typeText, speed);
+    }
+  }
+
+  window.addEventListener("load", () => {
+    typeText();
+
+    // 🎵 musik mulai dari awal DI PAGE 2
+    music.currentTime = 0;
+    music.play().catch(() => {});
+  });
+
+  // 💾 simpan waktu lagu buat page 3
+  setInterval(() => {
+    if (!music.paused) {
+      localStorage.setItem("musicTime", music.currentTime);
+    }
+  }, 500);
+
+  function goBack() {
+    window.location.href = "index.html";
+  }
+
+  function openLetter() {
+    window.location.href = "page3.html";
+  }
+</script>
+
+</body>
+</html>

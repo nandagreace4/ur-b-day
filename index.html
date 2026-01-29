@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday</title>
+
+<!-- Pixel font -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: #fff6f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .container {
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 16px;
+    color: #e85b8f;
+    margin-bottom: 30px;
+    min-height: 24px;
+  }
+
+  button {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 10px;
+    background: #e85b8f;
+    color: white;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #d94b7f;
+  }
+
+  /* cursor ketik */
+  #cursor {
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+  <audio id="bg-music" loop>
+    <source src="song's.mp3" type="audio/mpeg">
+  </audio>
+
+<div class="container">
+  <!-- teks diketik -->
+  <h1 id="typing-text"><span id="cursor">|</span></h1>
+
+  <button onclick="nextPage()">Next</button>
+</div>
+
+<script>
+  const text = "HAPPY BIRTHDAY SAYANG🤍🎁✨🎀";
+  const speed = 120;
+  let i = 0;
+
+  const music = document.getElementById("bg-music");
+
+  function typeText() {
+    if (i < text.length) {
+      document.getElementById("typing-text").innerHTML =
+        text.substring(0, i + 1) + '<span id="cursor">|</span>';
+      i++;
+      setTimeout(typeText, speed);
+    }
+  }
+
+  window.onload = typeText;
+
+  function nextPage() {
+    // 🔊 mulai musik saat klik pertama
+    music.play();
+    localStorage.setItem("musicPlaying", "yes");
+
+    window.location.href = "page2.html";
+  }
+</script>
+
+
+
+</body>
+</html>
+

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Reply</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: #fff6f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .container {
+    width: 320px;
+    text-align: center;
+  }
+
+  .paper {
+    background: #fff;
+    padding: 28px 22px 32px;
+    border-radius: 16px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25);
+    animation: fadeUp 1s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h2 {
+    font-size: 10px;
+    color: #e85b8f;
+    margin-bottom: 16px;
+  }
+
+  textarea {
+    width: 100%;
+    height: 120px;
+    resize: none;
+    border-radius: 12px;
+    border: 2px solid #f3c1d3;
+    padding: 12px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+    line-height: 1.8;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  textarea::placeholder {
+    color: #cfa2b4;
+  }
+
+  button {
+    margin-top: 18px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 9px;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 14px;
+    background: #e85b8f;
+    color: white;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #d94b7f;
+  }
+
+  /* POPUP */
+  .popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+  }
+
+  .popup-box {
+    background: #fff6f8;
+    padding: 24px 22px;
+    border-radius: 16px;
+    max-width: 260px;
+    font-size: 8px;
+    color: #5a3d2b;
+    line-height: 1.8;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.3);
+    animation: pop 0.4s ease;
+    text-align: center;
+  }
+
+  @keyframes pop {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+</style>
+</head>
+
+<body>
+
+<audio id="bg-music" loop>
+  <source src="song's.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+  <div class="paper">
+    <h2>write your message 💌</h2>
+
+    <textarea id="message"
+      placeholder="write something from your heart here..."></textarea>
+
+    <button onclick="sendMessage()">send</button>
+  </div>
+</div>
+
+<div id="popup" class="popup">
+  <div class="popup-box">
+    Thank you for your appreciation and reply, dear. 💖
+  </div>
+</div>
+
+<script>
+  const music = document.getElementById("bg-music");
+
+  // lanjutkan musik
+  window.addEventListener("load", () => {
+    const savedTime = localStorage.getItem("musicTime");
+    if (savedTime) music.currentTime = parseFloat(savedTime);
+
+    music.volume = 0.7;
+    music.play().catch(() => {});
+  });
+
+  setInterval(() => {
+    if (!music.paused) {
+      localStorage.setItem("musicTime", music.currentTime);
+    }
+  }, 500);
+
+  function sendMessage() {
+    const msg = document.getElementById("message").value.trim();
+    if (msg === "") return;
+
+    // 🔐 SIMPAN PESAN (HANYA KAMU YANG BISA LIHAT)
+    const replies = JSON.parse(localStorage.getItem("replyMessages")) || [];
+
+    replies.push({
+      text: msg,
+      time: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("replyMessages", JSON.stringify(replies));
+
+    // POPUP
+    document.getElementById("popup").style.display = "flex";
+
+    // ⏱️ setelah popup → balik ke halaman pertama
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 3000);
+  }
+</script>
+
+</body>
+</html>

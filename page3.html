@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Letter</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: #fff6f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .container {
+    text-align: center;
+    max-width: 320px;
+  }
+
+  .paper {
+    position: relative;
+    background: url("") center / contain no-repeat;
+    padding: 40px 28px 48px;
+    min-height: 380px;
+    filter: drop-shadow(0 14px 24px rgba(0,0,0,0.35));
+    color: #5a3d2b;
+    font-size: 8px;
+    line-height: 2;
+    text-align: left;
+    animation: fadeUp 1.2s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .paper p { margin-bottom: 10px; }
+
+  .signature {
+    margin-top: 16px;
+    text-align: right;
+  }
+
+  .needs {
+    margin-top: 1px;
+    font-size: 10px;
+    color: #e85b8f;
+  }
+
+  .choices {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+  }
+
+  .choice {
+    text-align: center;
+    cursor: pointer;
+    font-size: 22px;
+  }
+
+  .choice span {
+    display: block;
+    font-size: 8px;
+    margin-top: 6px;
+    color: #e85b8f;
+  }
+
+  .popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+  }
+
+  .popup-box {
+    background: #fff6f8;
+    padding: 22px 20px;
+    border-radius: 14px;
+    max-width: 260px;
+    font-size: 8px;
+    color: #5a3d2b;
+    line-height: 1.8;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    text-align: center;
+    animation: popupFade 0.4s ease;
+  }
+
+  .next-button {
+  margin-top: 18px;
+  text-align: center;
+}
+
+.next-button button {
+  background: #e85b8f;
+  color: #fff6f8;
+  border: none;
+  padding: 10px 16px;
+  font-size: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.next-button button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(232,91,143,0.4);
+}
+
+
+  @keyframes popupFade {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* 🎉 CONFETTI */
+  .confetti {
+    position: fixed;
+    top: -10px;
+    width: 8px;
+    height: 8px;
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 5;
+    animation: fall linear forwards;
+  }
+
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); }
+  }
+</style>
+</head>
+
+<body>
+
+<audio id="bg-music" loop>
+  <source src="song's.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+
+  <div class="paper">
+    <p>Hi, happy birthday!</p>
+    <p>selamat menginjak dewasa yang sesungguhnya dan selamat datang di kehidupan yang sesungguhnya,</p>
+    <p>doa terbaik untukmu. maaf tidak bisa merayakan langsung di hadapan mu, tapi segenap hati mengucapkan selamat bertambah usia</p>
+    <p>semoga hal baik selalu beriringan denganmu, semoga semesta senantiasa berpihak pada mu, semoga jalanmu untuk mencapai masa depan yang cerah di permudahkan,</p>
+    <p>teruslah tumbuh, teruslah melangkah & berbahagia. aku akan selalu bangga atas setiap proses yang sudah kamu lalui.</p>
+    <p>i will always support u from afar, hope Allah bless you and let happiness come to you in every single second, and i love you more❤️</p>
+
+    <div class="signature">
+      with love,<br>your girlfriend
+    </div>
+  </div>
+
+  <div class="needs">how do you feel after reading this?</div>
+
+  <div class="choices">
+    <div class="choice" onclick="showMessage('biasa')">💌<span>biasa aja</span></div>
+    <div class="choice" onclick="showMessage('sedih')">💌<span>sedih</span></div>
+    <div class="choice" onclick="showMessage('senang')">💌<span>senang</span></div>
+    <div class="choice" onclick="showMessage('bosan')">💌<span>membosankan</span></div>
+  </div>
+
+   <!-- tombol lanjut menulis pesan -->
+   <div class="next-button">
+    <button onclick="goNext()">write a message</button>
+  </div>
+
+  <div id="popup" class="popup">
+    <div class="popup-box">
+      <p id="popup-text"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  let popupTimer;
+  const music = document.getElementById("bg-music");
+
+  function showMessage(type) {
+    const text = {
+      biasa: "gapapa kok kalau rasanya biasa aja, yang penting kamu sudah baca sampai akhir",
+      sedih: "maaf ya kalau surat ini bikin kamu sedih tapi, aku harap kamu tau, kamu nggak sendirian.",
+      senang: "aku ikut seneng kalau kamu ngerasa senang itu berarti surat ini berhasil sampai dari hati ke hati.",
+      bosan: "hehe maaf ya kalau membosankan, tapi ini aku tulis dengan sepenuh hati."
+    };
+    
+
+    document.getElementById("popup-text").innerText = text[type];
+    document.getElementById("popup").style.display = "flex";
+
+    clearTimeout(popupTimer);
+    popupTimer = setTimeout(() => {
+      document.getElementById("popup").style.display = "none";
+    }, 3000);
+  }
+
+  function goNext() {
+  window.location.href = "../page4.html"; // ganti sesuai lokasi file
+}
+
+
+
+
+  window.addEventListener("load", () => {
+    const savedTime = localStorage.getItem("musicTime");
+    if (savedTime) music.currentTime = parseFloat(savedTime);
+
+    music.volume = 0.7;
+    music.play().catch(() => {});
+    startConfetti();
+  });
+
+  setInterval(() => {
+    if (!music.paused) {
+      localStorage.setItem("musicTime", music.currentTime);
+    }
+  }, 500);
+
+  function startConfetti() {
+    for (let i = 0; i < 40; i++) {
+      const c = document.createElement("div");
+      c.className = "confetti";
+      c.style.left = Math.random() * 100 + "vw";
+
+      const size = 6 + Math.random() * 6;
+      c.style.width = size + "px";
+      c.style.height = size + "px";
+
+      const colors = ["#f8b5c6", "#ffd1dc", "#fff0f5", "#f3c1d3"];
+      c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      c.style.animationDuration = 2 + Math.random() * 2 + "s";
+
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 4000);
+    }
+  }
+</script>
+
+
+</body>
+</html>
